@@ -49,7 +49,7 @@ export function DocentSection({ menuItemId, locale }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [menuItemId, locale]);
+  }, [menuItemId, locale, t]);
 
   if (loading) {
     return (

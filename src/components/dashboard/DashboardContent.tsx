@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { StatsCards, type DashboardStats } from './StatsCards';
 import { OrderCard, type DashboardOrder } from './OrderCard';
+import { WeeklyReportButton } from './WeeklyReportButton';
 
 type Props = {
   restaurantId: string;
@@ -96,7 +97,10 @@ export function DashboardContent({ restaurantId }: Props) {
   return (
     <main className="min-h-screen bg-gray-100 p-6">
       <div className="mx-auto max-w-4xl space-y-6">
-        <h1 className="text-2xl font-bold text-gray-900">사장님 대시보드</h1>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1 className="text-2xl font-bold text-gray-900">사장님 대시보드</h1>
+          <WeeklyReportButton restaurantId={restaurantId} />
+        </div>
 
         <section>
           <h2 className="mb-3 text-sm font-medium text-gray-600">오늘 통계</h2>

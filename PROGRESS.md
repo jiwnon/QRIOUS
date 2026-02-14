@@ -5,7 +5,7 @@
 - 다국어 (한/영/중/일)
 - AI 도슨트 (OpenAI GPT-4o-mini)
 - 결제: 토스페이먼츠(한국 카드), Stripe(알리페이, 위챗페이, 카드)
-- 비공개 평가 → AI 주간 리포트 예정
+- 비공개 평가 → 주간 AI 리포트 (GPT-4o, 캐시)
 
 ## 기술 스택
 - Next.js 15 (App Router) + TypeScript
@@ -28,6 +28,8 @@ orders: id, restaurant_id, table_id, status, total_amount, payment_status,
 order_items: id, order_id, menu_item_id, quantity, unit_price, options, created_at
 private_reviews: id, order_id, restaurant_id, rating, food_rating, service_rating,
                  comment, liked_items (JSONB), created_at
+weekly_reports: id, restaurant_id, week_start (DATE), report_json (JSONB), created_at
+                UNIQUE(restaurant_id, week_start)
 ```
 
 ## 완료된 기능
@@ -73,6 +75,13 @@ private_reviews: id, order_id, restaurant_id, rating, food_rating, service_ratin
 - 컴포넌트: DashboardContent, OrderCard, StatsCards
 - Realtime: orders 테이블 복제 활성화 필요 (`ALTER PUBLICATION supabase_realtime ADD TABLE orders;`)
 
+### ✅ Step D: 주간 AI 리포트
+- API: GET /api/dashboard/[restaurantId]/weekly-report
+- 지난 7일 집계: 매출·주문 건수, 메뉴별 판매 상위 5, 평균 평점, 저평점(3점 이하) 의견
+- OpenAI GPT-4o로 JSON 리포트 생성: sales_summary, top_insights, recommendations(3), warnings
+- 캐시: weekly_reports 테이블, 같은 주(월요일 0시 UTC 기준) 재요청 시 캐시 반환
+- 컴포넌트: WeeklyReportButton, WeeklyReportModal (대시보드 상단 "주간 리포트 보기")
+
 ## 주요 파일 경로
 ```
 src/
@@ -88,6 +97,7 @@ src/
   api/
     ai/generate-docent/           # AI 도슨트 생성
     dashboard/[restaurantId]/     # 대시보드 데이터 (pending 목록 + 오늘 통계)
+      weekly-report/              # 주간 AI 리포트 (GET, 캐시)
     orders/
       create/                     # 주문 생성
       [orderId]/                  # 주문 단건 조회 (GET), 상태 변경 (PATCH)
@@ -112,6 +122,8 @@ src/
     DashboardContent.tsx           # 대시보드 (Realtime 구독)
     OrderCard.tsx                 # 주문 카드 (완료 버튼)
     StatsCards.tsx                # 오늘 통계 카드
+    WeeklyReportButton.tsx        # 주간 리포트 보기 버튼
+    WeeklyReportModal.tsx         # 주간 리포트 모달
   lib/
     supabase/                     # DB 클라이언트
     openai/client.ts              # OpenAI 연동
@@ -146,9 +158,6 @@ NEXT_PUBLIC_APP_URL
 
 ### Step C: 인증
 사장님 로그인
-
-### Step D: AI 리포트
-주간 매출 분석 및 개선 제안
 
 ---
 

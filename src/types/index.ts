@@ -79,3 +79,11 @@ export interface DocentContent {
   ingredients: string[];
   recommendation: string;
 }
+
+/** 주간 AI 리포트 응답 형식 */
+export interface WeeklyReportContent {
+  sales_summary: string;
+  top_insights: string[];
+  recommendations: string[];
+  warnings: string[];
+}
