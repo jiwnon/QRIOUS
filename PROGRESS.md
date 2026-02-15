@@ -161,6 +161,8 @@ NEXT_PUBLIC_APP_URL  # 선택
 - **vercel-composition-patterns**: React 컴포지션, compound components
 - **web-design-guidelines**: Web Interface Guidelines 리뷰
 - **find-skills**: agent skill 검색·설치 안내
+- **cloudflare**: Workers, Pages, KV/D1/R2, Workers AI, WAF 등 Cloudflare 플랫폼 전반
+- **wrangler**: Cloudflare Workers CLI (배포·개발·리소스 관리)
 
 ## 최적화 적용 사항
 - **주문 페이지 (order/.../page.tsx)**: restaurant, table, menuItems를 `Promise.all`로 한 번에 조회.
