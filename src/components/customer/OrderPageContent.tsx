@@ -63,6 +63,18 @@ export function OrderPageContent({
     );
   }, [menuItems, selectedCategory]);
 
+  const getBadgeLabels = useCallback(
+    (item: MenuItem, index: number) => {
+      const labels: string[] = [];
+      if (index === 0) labels.push(t('badgePopular1'));
+      else if (index === 1) labels.push(t('badgePopular2'));
+      else if (index === 2) labels.push(t('badgePopular3'));
+      if (index < 5) labels.push(t('badgeRecommended'));
+      return labels;
+    },
+    [t]
+  );
+
   const addToCart = useCallback((item: MenuItem, quantity = 1) => {
     setCart((prev) => {
       const i = prev.findIndex((e) => e.menuItem.id === item.id);
@@ -137,23 +149,49 @@ export function OrderPageContent({
     : table.name;
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-24">
-      {/* 헤더 */}
-      <header className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3 shadow-sm">
-        <div className="flex items-center justify-between">
-          <LanguageSelector />
-          <span className="text-sm font-medium text-gray-500">
-            Table {tableDisplay}
-          </span>
+    <div className="min-h-screen bg-white pb-24">
+      {/* 헤더: 가게명 + 검색 + 장바구니 (배민 스타일) */}
+      <header className="sticky top-0 z-10 border-b border-gray-200 bg-white">
+        <div className="flex items-center justify-between gap-3 px-4 py-3">
+          <div className="flex min-w-0 flex-1 items-center gap-2">
+            <h1 className="truncate text-lg font-bold text-gray-900">
+              {restaurant.name}
+            </h1>
+            <span className="shrink-0 text-sm text-gray-400">{t('tableLabel')} {tableDisplay}</span>
+          </div>
+          <div className="flex shrink-0 items-center gap-1">
+            <LanguageSelector />
+            <button
+              type="button"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-gray-600 hover:bg-gray-100"
+              aria-label={t('searchAria')}
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => setCartModalOpen(true)}
+              className="relative flex h-9 w-9 items-center justify-center rounded-full text-gray-600 hover:bg-gray-100"
+              aria-label={t('cartAria')}
+            >
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              {cartItemCount > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-primary-500 px-1 text-[10px] font-bold text-white">
+                  {cartItemCount > 99 ? '99+' : cartItemCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
-        <h1 className="mt-1 text-lg font-bold text-gray-900">
-          {restaurant.name}
-        </h1>
       </header>
 
-      {/* 카테고리 탭 */}
-      <div className="sticky top-[57px] z-[9] border-b border-gray-100 bg-white px-4 py-2">
-        <div className="flex gap-2 overflow-x-auto pb-1">
+      {/* 카테고리 탭: 상단 고정, 가로 스크롤, pill */}
+      <div className="sticky top-[52px] z-[9] border-b border-gray-100 bg-white">
+        <div className="flex gap-2 overflow-x-auto px-4 py-3">
           {categories.map((cat) => {
             const label = cat === CATEGORY_ALL ? t('categoryAll') : t(CATEGORY_KEYS[cat] ?? 'categoryMain');
             const isActive = selectedCategory === cat;
@@ -164,7 +202,7 @@ export function OrderPageContent({
                 onClick={() => setSelectedCategory(cat)}
                 className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition ${
                   isActive
-                    ? 'bg-primary-500 text-white'
+                    ? 'bg-gray-900 text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -175,8 +213,8 @@ export function OrderPageContent({
         </div>
       </div>
 
-      {/* 메뉴 그리드 */}
-      <div className="px-4 py-4">
+      {/* 섹션 헤더 + 메뉴 리스트 */}
+      <main className="px-4">
         <AnimatePresence mode="wait">
           {filteredItems.length === 0 ? (
             <motion.p
@@ -189,29 +227,34 @@ export function OrderPageContent({
               {t('noMenu')}
             </motion.p>
           ) : (
-            <motion.div
+            <motion.section
               key={selectedCategory}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="grid grid-cols-2 gap-3 sm:grid-cols-3"
             >
-              {filteredItems.map((item) => (
-                <OrderMenuCard
-                  key={item.id}
-                  item={item}
-                  locale={locale}
-                  onAdd={() => addToCart(item)}
-                  onOpenDetail={() => setSelectedMenu(item)}
-                />
-              ))}
-            </motion.div>
+              <h2 className="border-b border-gray-100 pt-4 pb-2 text-base font-semibold text-gray-900">
+                {t('sectionPopular')}
+              </h2>
+              <ul className="divide-y-0">
+                {filteredItems.map((item, index) => (
+                  <li key={item.id}>
+                    <OrderMenuCard
+                      item={item}
+                      locale={locale}
+                      badgeLabels={getBadgeLabels(item, index)}
+                      onAdd={() => addToCart(item)}
+                      onOpenDetail={() => setSelectedMenu(item)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </motion.section>
           )}
         </AnimatePresence>
-      </div>
+      </main>
 
-      {/* 메뉴 상세 모달 */}
       <AnimatePresence>
         {selectedMenu && (
           <MenuDetailModal
@@ -223,7 +266,6 @@ export function OrderPageContent({
         )}
       </AnimatePresence>
 
-      {/* 장바구니 모달 */}
       <AnimatePresence>
         {cartModalOpen && (
           <CartModal
@@ -237,7 +279,6 @@ export function OrderPageContent({
         )}
       </AnimatePresence>
 
-      {/* 하단 고정 바 */}
       <CartBar
         itemCount={cartItemCount}
         totalPrice={totalPrice}
