@@ -29,7 +29,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className={`${notoSansKr.variable} font-sans antialiased min-h-screen bg-gray-50`}>
+      <body
+        className={`${notoSansKr.variable} font-sans antialiased min-h-screen bg-gray-50`}
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>

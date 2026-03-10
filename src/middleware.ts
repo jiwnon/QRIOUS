@@ -34,6 +34,19 @@ export default async function middleware(request: Request) {
   return resWithSession;
 }
 
+// next-intl이 as-needed일 때 기본 locale(ko)은 /login처럼 prefix 없이 접근 가능한데,
+// 이 경로들도 미들웨어를 타야 [locale] 라우트로 매칭됩니다.
 export const config = {
-  matcher: ['/', '/(ko|en|zh|ja)/:path*', '/dashboard', '/dashboard/:path*'],
+  matcher: [
+    '/',
+    '/(ko|en|zh|ja)/:path*',
+    '/dashboard',
+    '/dashboard/:path*',
+    '/login',
+    '/login/:path*',
+    '/signup',
+    '/signup/:path*',
+    '/order',
+    '/order/:path*',
+  ],
 };

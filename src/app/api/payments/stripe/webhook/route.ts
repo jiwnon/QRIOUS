@@ -52,7 +52,9 @@ export async function POST(request: Request) {
     .update({
       payment_status: 'paid',
       payment_provider: 'stripe',
-      payment_key: session.payment_intent ?? session.id,
+      payment_key: typeof session.payment_intent === 'object' && session.payment_intent?.id
+        ? session.payment_intent.id
+        : (session.payment_intent as string | null) ?? session.id,
       updated_at: new Date().toISOString(),
     })
     .eq('id', orderId);

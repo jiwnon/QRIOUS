@@ -4,10 +4,14 @@ import { getCurrentUser, getOwnedRestaurantIds } from '@/lib/auth/server';
 
 type Params = { params: Promise<{ orderId: string }> };
 
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// GET은 결제 완료 후 손님(비로그인)도 본인 주문 확인에 사용됨.
+// orderId가 UUID이므로 추측이 사실상 불가능하며, UUID 형식 검증으로 무작위 probing을 방지함.
 export async function GET(_request: Request, { params }: Params) {
   try {
     const { orderId } = await params;
-    if (!orderId) {
+    if (!orderId || !UUID_REGEX.test(orderId)) {
       return NextResponse.json({ error: 'orderId required' }, { status: 400 });
     }
 

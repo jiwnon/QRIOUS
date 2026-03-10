@@ -24,6 +24,10 @@ export interface MenuItem {
   price: number;
   image_url?: string;
   docent_content?: string;
+  ai_docent_ko?: string | null;
+  ai_docent_en?: string | null;
+  ai_docent_zh?: string | null;
+  ai_docent_ja?: string | null;
   sort_order: number;
   is_available: boolean;
   category?: MenuCategory | string | null;
@@ -69,7 +73,10 @@ export interface PrivateReview {
   order_id: string;
   restaurant_id: string;
   rating: number;
+  food_rating?: number | null;
+  service_rating?: number | null;
   comment?: string;
+  liked_items?: string[];
   created_at: string;
 }
 
