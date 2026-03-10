@@ -151,7 +151,7 @@ export function CheckoutContent({
               disabled={paying}
               className="w-full rounded-xl border-2 border-blue-600 bg-white py-3 font-medium text-blue-600 transition hover:bg-blue-50 disabled:opacity-50"
             >
-              한국 카드 (토스페이먼츠)
+              페이 / 카드 결제
             </button>
             {/* 외국인 결제 (Stripe): 사업자 등록 후 활성화 예정 */}
           </div>
