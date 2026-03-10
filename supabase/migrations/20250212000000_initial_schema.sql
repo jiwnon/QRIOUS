@@ -1,4 +1,4 @@
--- Kurious: 식당 QR 주문 시스템 초기 스키마
+-- Platemate: 식당 QR 주문 시스템 초기 스키마
 
 -- 식당
 CREATE TABLE IF NOT EXISTS restaurants (

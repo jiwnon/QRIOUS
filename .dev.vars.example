@@ -22,4 +22,4 @@ STRIPE_SECRET_KEY=sk_test_xxx
 STRIPE_WEBHOOK_SECRET=whsec_xxx
 
 # App URL (배포 후 실제 도메인으로 변경)
-NEXT_PUBLIC_APP_URL=https://kurious.pages.dev
+NEXT_PUBLIC_APP_URL=https://platem8.xyz
