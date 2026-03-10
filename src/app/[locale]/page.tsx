@@ -9,13 +9,13 @@ export default function HomePage() {
       <p className="text-gray-600 text-center mb-8">{t('tagline')}</p>
       <div className="flex gap-4">
         <Link
-          href="/order/demo/table-1"
+          href="/order/a0000000-0000-0000-0000-000000000001/b0000000-0000-0000-0000-000000000001"
           className="px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition"
         >
           {t('guestOrder')}
         </Link>
         <Link
-          href="/dashboard/demo"
+          href="/dashboard"
           className="px-6 py-3 border border-primary-500 text-primary-600 rounded-lg hover:bg-primary-50 transition"
         >
           {t('dashboard')}
