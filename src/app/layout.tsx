@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Noto_Sans_KR } from 'next/font/google';
 import '../app/globals.css';
+import CapacitorProvider from '@/components/shared/CapacitorProvider';
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ['latin', 'latin-ext'],
@@ -33,6 +34,7 @@ export default function RootLayout({
         className={`${notoSansKr.variable} font-sans antialiased min-h-screen bg-gray-50`}
         suppressHydrationWarning
       >
+        <CapacitorProvider />
         {children}
       </body>
     </html>

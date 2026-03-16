@@ -32,8 +32,8 @@ export function LoginForm({ locale, redirectTo }: Props) {
         return;
       }
       const target = redirectTo && redirectTo.startsWith('/') ? redirectTo : `/${locale}/dashboard`;
+      router.refresh(); // 서버 세션 동기화 후 이동 (쿠키 race condition 방지)
       router.push(target);
-      router.refresh();
     } catch {
       setError(t('loginError'));
       setLoading(false);
