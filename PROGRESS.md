@@ -93,7 +93,7 @@ weekly_reports
   UNIQUE(restaurant_id, week_start)
 
 restaurant_owners
-  restaurant_id, user_id, role, created_at, updated_at
+  user_id, restaurant_id, created_at  (PK: user_id, restaurant_id)
 
 push_tokens
   id, user_id, token, platform, created_at
@@ -139,7 +139,8 @@ GET    /api/dashboard/restaurants                    # 로그인 사용자의 �
 POST   /api/dashboard/restaurants                    # 신규 레스토랑 등록
 
 GET    /api/dashboard/[restaurantId]                 # 메뉴·테이블·주문·통계 일괄
-PATCH  /api/dashboard/[restaurantId]                 # 레스토랑 정보 수정
+GET    /api/dashboard/[restaurantId]/restaurant      # 레스토랑 정보 조회
+PATCH  /api/dashboard/[restaurantId]/restaurant     # 레스토랑 정보 수정
 POST   /api/dashboard/[restaurantId]/restaurant/upload
 
 POST   /api/dashboard/[restaurantId]/menu

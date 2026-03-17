@@ -8,7 +8,7 @@ type Props = {
   params: Promise<{ locale: string; restaurantId: string; tableId: string }>;
 };
 
-const LOCALES: Locale[] = ['ko', 'en', 'zh', 'ja'];
+const LOCALES: Locale[] = ['ko', 'en', 'zh', 'ja', 'ru'];
 
 export default async function OrderPage({ params }: Props) {
   const { locale: localeParam, restaurantId, tableId } = await params;
