@@ -120,6 +120,12 @@ export function DashboardContent({ restaurantId, locale }: Props) {
             >
               기본 정보
             </Link>
+            <Link
+              href={`/${locale}/dashboard/${restaurantId}/reviews`}
+              className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+            >
+              리뷰 분석
+            </Link>
             <WeeklyReportButton restaurantId={restaurantId} />
             <button
               type="button"
