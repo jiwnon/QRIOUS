@@ -392,7 +392,7 @@ function MenuFormModal({ restaurantId, initial, onClose, onSaved }: FormModalPro
                 disabled={saving}
                 className="flex-1 rounded-lg bg-primary-500 py-2 text-white hover:bg-primary-600 disabled:opacity-50"
               >
-                {saving ? '저장 중…' : initial ? '수정' : '추가'}
+                {saving ? '번역·저장 중…' : initial ? '수정' : '추가'}
               </button>
             </div>
           </form>

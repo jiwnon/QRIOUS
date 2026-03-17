@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentUser, getOwnedRestaurantIds } from '@/lib/auth/server';
+import { translateMenuItem } from '@/lib/openai/client';
 
 type Params = { params: Promise<{ restaurantId: string; menuItemId: string }> };
 
@@ -47,8 +48,29 @@ export async function PATCH(request: Request, { params }: Params) {
     const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
     if (body.name !== undefined) updates.name = body.name;
     if (body.description !== undefined) updates.description = body.description;
-    if (body.name_i18n !== undefined) updates.name_i18n = body.name_i18n;
-    if (body.description_i18n !== undefined) updates.description_i18n = body.description_i18n;
+
+    // 이름이나 설명이 변경된 경우 자동 번역
+    if (body.name !== undefined || body.description !== undefined) {
+      try {
+        const { data: current } = await supabase
+          .from('menu_items')
+          .select('name, description')
+          .eq('id', menuItemId)
+          .single();
+        const nameToTranslate = body.name ?? current?.name ?? '';
+        const descToTranslate = body.description !== undefined ? (body.description ?? null) : (current?.description ?? null);
+        const translated = await translateMenuItem(nameToTranslate, descToTranslate);
+        updates.name_i18n = translated.name_i18n;
+        updates.description_i18n = translated.description_i18n;
+      } catch (e) {
+        console.error('[menu PATCH] translation failed, skipping i18n update', e);
+        if (body.name_i18n !== undefined) updates.name_i18n = body.name_i18n;
+        if (body.description_i18n !== undefined) updates.description_i18n = body.description_i18n;
+      }
+    } else {
+      if (body.name_i18n !== undefined) updates.name_i18n = body.name_i18n;
+      if (body.description_i18n !== undefined) updates.description_i18n = body.description_i18n;
+    }
     if (body.price !== undefined) updates.price = body.price;
     if (body.image_url !== undefined) updates.image_url = body.image_url;
     if (body.category !== undefined) updates.category = body.category;

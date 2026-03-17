@@ -1,6 +1,6 @@
 // 공통 타입 정의
 
-export type Locale = 'ko' | 'en' | 'zh' | 'ja';
+export type Locale = 'ko' | 'en' | 'zh' | 'ja' | 'ru';
 
 export interface Restaurant {
   id: string;
@@ -28,6 +28,7 @@ export interface MenuItem {
   ai_docent_en?: string | null;
   ai_docent_zh?: string | null;
   ai_docent_ja?: string | null;
+  ai_docent_ru?: string | null;
   sort_order: number;
   is_available: boolean;
   category?: MenuCategory | string | null;

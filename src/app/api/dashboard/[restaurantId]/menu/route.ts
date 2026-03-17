@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentUser, getOwnedRestaurantIds } from '@/lib/auth/server';
+import { translateMenuItem } from '@/lib/openai/client';
 
 type Params = { params: Promise<{ restaurantId: string }> };
 
@@ -79,6 +80,17 @@ export async function POST(request: Request, { params }: Params) {
       return NextResponse.json({ error: 'name and price (>=0) required' }, { status: 400 });
     }
 
+    // 자동 번역 (실패해도 저장은 진행)
+    let name_i18n = body.name_i18n ?? {};
+    let description_i18n = body.description_i18n ?? {};
+    try {
+      const translated = await translateMenuItem(body.name, body.description ?? null);
+      name_i18n = translated.name_i18n;
+      description_i18n = translated.description_i18n;
+    } catch (e) {
+      console.error('[menu POST] translation failed, saving without translations', e);
+    }
+
     const supabase = await createClient();
     const { data, error } = await supabase
       .from('menu_items')
@@ -86,8 +98,8 @@ export async function POST(request: Request, { params }: Params) {
         restaurant_id: restaurantId,
         name: body.name,
         description: body.description ?? null,
-        name_i18n: body.name_i18n ?? {},
-        description_i18n: body.description_i18n ?? {},
+        name_i18n,
+        description_i18n,
         price: body.price,
         image_url: body.image_url ?? null,
         category: body.category ?? null,

@@ -1,0 +1,73 @@
+{
+  "Home": {
+    "tagline": "Заказ по QR-коду. На вашем языке. Откройте корейскую кухню с AI.",
+    "guestOrder": "Заказ для гостей",
+    "dashboard": "Панель управления"
+  },
+  "Order": {
+    "menu": "Меню",
+    "cart": "Корзина",
+    "checkout": "Оплата",
+    "docent": "AI-гид",
+    "placeOrder": "Оформить заказ",
+    "categoryAll": "Все",
+    "categoryMain": "Основные",
+    "categorySide": "Гарниры",
+    "categoryDrink": "Напитки",
+    "sectionPopular": "Самые популярные",
+    "badgePopular1": "Популярное #1",
+    "badgePopular2": "Популярное #2",
+    "badgePopular3": "Популярное #3",
+    "badgeRecommended": "Выбор владельца",
+    "searchAria": "Поиск",
+    "cartAria": "Корзина",
+    "tableLabel": "Стол",
+    "restaurantNotFound": "Ресторан не найден.",
+    "tableNotFound": "Стол не найден.",
+    "noMenu": "Нет позиций в меню."
+  },
+  "cartModal": {
+    "title": "Корзина",
+    "close": "Закрыть",
+    "empty": "Корзина пуста",
+    "total": "Итого",
+    "placeOrder": "Оформить заказ",
+    "submitting": "Обработка..."
+  },
+  "menuDetail": {
+    "close": "Закрыть",
+    "docentTitle": "AI-гид",
+    "culturalContext": "Культурный контекст",
+    "ingredients": "Ингредиенты",
+    "recommendation": "Рекомендация",
+    "quantity": "Количество",
+    "addToCart": "Добавить в корзину",
+    "loading": "Генерация AI-описания...",
+    "error": "Не удалось загрузить описание."
+  },
+  "Dashboard": {
+    "orders": "Заказы",
+    "menu": "Меню",
+    "reviews": "Отзывы",
+    "report": "Недельный отчёт"
+  },
+  "checkout": {
+    "complete": "Заказ оформлен!"
+  },
+  "Auth": {
+    "login": "Войти",
+    "signUp": "Регистрация",
+    "email": "Email",
+    "password": "Пароль",
+    "loginTitle": "Вход для владельца",
+    "signUpTitle": "Создать аккаунт",
+    "submitLogin": "Войти",
+    "submitSignUp": "Зарегистрироваться",
+    "noAccount": "Нет аккаунта?",
+    "hasAccount": "Уже есть аккаунт?",
+    "loginError": "Ошибка входа",
+    "signUpSuccess": "Аккаунт создан. Проверьте email для подтверждения.",
+    "goToLogin": "Войти",
+    "backToHome": "На главную"
+  }
+}

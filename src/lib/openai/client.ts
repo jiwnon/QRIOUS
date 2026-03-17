@@ -14,6 +14,7 @@ const LOCALE_NAMES: Record<string, string> = {
   en: 'English',
   zh: 'Chinese',
   ja: 'Japanese',
+  ru: 'Russian',
 };
 
 /**
@@ -74,6 +75,50 @@ export async function generateDocentJSON(
     throw new Error('Invalid docent JSON structure');
   }
   return parsed;
+}
+
+/**
+ * 메뉴 이름·설명을 5개 언어(ko/en/zh/ja/ru)로 자동 번역.
+ * 입력 언어는 GPT가 자동 감지하며, 해당 언어는 원문을 그대로 사용.
+ */
+export async function translateMenuItem(
+  name: string,
+  description: string | null
+): Promise<{ name_i18n: Record<string, string>; description_i18n: Record<string, string> }> {
+  const openai = getClient();
+  const res = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    response_format: { type: 'json_object' as const },
+    messages: [
+      {
+        role: 'system',
+        content: `You are a professional menu translator for a Korean restaurant app.
+Detect the input language automatically and translate both the menu name and description into all 5 languages: Korean (ko), English (en), Chinese Simplified (zh), Japanese (ja), Russian (ru).
+For the language that matches the input, preserve the original text as-is.
+Respond ONLY with valid JSON in this exact format:
+{
+  "name": { "ko": "...", "en": "...", "zh": "...", "ja": "...", "ru": "..." },
+  "description": { "ko": "...", "en": "...", "zh": "...", "ja": "...", "ru": "..." }
+}
+If description is empty, return empty strings for all description values.`,
+      },
+      {
+        role: 'user',
+        content: `Name: ${name}\nDescription: ${description ?? ''}`,
+      },
+    ],
+    max_tokens: 800,
+  });
+  const raw = res.choices[0]?.message?.content?.trim();
+  if (!raw) throw new Error('Empty translation response');
+  const parsed = JSON.parse(raw) as {
+    name: Record<string, string>;
+    description: Record<string, string>;
+  };
+  return {
+    name_i18n: parsed.name,
+    description_i18n: parsed.description,
+  };
 }
 
 export type WeeklyReportAggregate = {

@@ -4,12 +4,13 @@ import { generateDocentJSON } from '@/lib/openai/client';
 import type { DocentContent } from '@/types';
 import type { Locale } from '@/types';
 
-const VALID_LOCALES: Locale[] = ['ko', 'en', 'zh', 'ja'];
-const DOCENT_COLUMNS: Record<Locale, 'ai_docent_ko' | 'ai_docent_en' | 'ai_docent_zh' | 'ai_docent_ja'> = {
+const VALID_LOCALES: Locale[] = ['ko', 'en', 'zh', 'ja', 'ru'];
+const DOCENT_COLUMNS: Record<Locale, string> = {
   ko: 'ai_docent_ko',
   en: 'ai_docent_en',
   zh: 'ai_docent_zh',
   ja: 'ai_docent_ja',
+  ru: 'ai_docent_ru',
 };
 
 export async function POST(request: Request) {
@@ -31,7 +32,7 @@ export async function POST(request: Request) {
 
     const { data: menuItem, error: fetchError } = await supabase
       .from('menu_items')
-      .select('id, name, description, name_i18n, ai_docent_ko, ai_docent_en, ai_docent_zh, ai_docent_ja')
+      .select('id, name, description, name_i18n, ai_docent_ko, ai_docent_en, ai_docent_zh, ai_docent_ja, ai_docent_ru')
       .eq('id', menuItemId)
       .single();
 
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const cached = menuItem[column] as string | null | undefined;
+    const cached = (menuItem as Record<string, unknown>)[column] as string | null | undefined;
     if (cached && cached.trim()) {
       try {
         const parsed = JSON.parse(cached) as DocentContent;
