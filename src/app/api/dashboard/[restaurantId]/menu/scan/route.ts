@@ -27,9 +27,11 @@ export async function POST(request: Request, { params }: Params) {
     const mimeType = file.type || 'image/jpeg';
     const arrayBuffer = await file.arrayBuffer();
     const uint8 = new Uint8Array(arrayBuffer);
+    // 청크 단위로 처리 (단순 += 루프는 대용량 이미지에서 O(n²) 성능 문제 발생)
+    const CHUNK = 8192;
     let binary = '';
-    for (let i = 0; i < uint8.length; i++) {
-      binary += String.fromCharCode(uint8[i]);
+    for (let i = 0; i < uint8.length; i += CHUNK) {
+      binary += String.fromCharCode(...uint8.subarray(i, i + CHUNK));
     }
     const imageBase64 = btoa(binary);
 
